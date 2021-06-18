@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import UserContext from "../contexts/CurrentUserContext";
+import { Switch, Route, useHistory } from "react-router-dom";
 import "../index.css";
 import Header from "./Header";
+import SignIn from "./SignIn";
+import SignUp from "./SignUp";
 import Main from "./Main";
 import Footer from "./Footer";
 import EditProfilePopup from "./EditProfilePopup";
@@ -138,7 +141,6 @@ function App() {
    */
 
   const handleCardLike = (card) => {
-    // Check one more time if this card was already liked
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
     if (isLiked === false) {
       api
@@ -182,52 +184,70 @@ function App() {
 
   return (
     <UserContext.Provider value={currentUser}>
-      <div className='page'>
-        <Header />
-        <Main
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditAvatar={handleEditAvatarClick}
-          onCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-          cards={cards}
-        />
-        <Footer />
+      <Switch>
+        <Route path='/signin'>
+          <div className='page'>
+            <Header></Header>
+            <SignIn></SignIn>
+            <Footer></Footer>
+          </div>
+        </Route>
+        <Route path='/signup'>
+          <div className='page'>
+            <Header></Header>
+            <SignUp></SignUp>
+            <Footer></Footer>
+          </div>
+        </Route>
+        <Route exact path='/'>
+          <div className='page'>
+            <Header />
+            <Main
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onEditAvatar={handleEditAvatarClick}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
+              cards={cards}
+            />
+            <Footer />
 
-        <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
-        />
+            <EditProfilePopup
+              isOpen={isEditProfilePopupOpen}
+              onClose={closeAllPopups}
+              onUpdateUser={handleUpdateUser}
+            />
 
-        <EditAvatarPopup
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar}
-        />
+            <EditAvatarPopup
+              isOpen={isEditAvatarPopupOpen}
+              onClose={closeAllPopups}
+              onUpdateAvatar={handleUpdateAvatar}
+            />
 
-        <AddPlacePopup
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          onAddPlace={handleAddPlaceSubmit}
-        />
+            <AddPlacePopup
+              isOpen={isAddPlacePopupOpen}
+              onClose={closeAllPopups}
+              onAddPlace={handleAddPlaceSubmit}
+            />
 
-        <PopupWithForm popupName='confirmDelete' title='Are you sure?'>
-          <button
-            type='button'
-            className='popup__button confirm-button'
-            aria-label='confirm delete button'>
-            Yes
-          </button>
-        </PopupWithForm>
+            <PopupWithForm popupName='confirmDelete' title='Are you sure?'>
+              <button
+                type='button'
+                className='popup__button confirm-button'
+                aria-label='confirm delete button'>
+                Yes
+              </button>
+            </PopupWithForm>
 
-        <ImagePopup
-          card={selectedCard}
-          isOpen={isImagePopupOpen}
-          onClose={closeAllPopups}
-        />
-      </div>
+            <ImagePopup
+              card={selectedCard}
+              isOpen={isImagePopupOpen}
+              onClose={closeAllPopups}
+            />
+          </div>
+        </Route>
+      </Switch>
     </UserContext.Provider>
   );
 }
