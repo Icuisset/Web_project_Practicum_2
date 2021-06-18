@@ -4,7 +4,7 @@ import { Switch, Route, useHistory } from "react-router-dom";
 import "../index.css";
 import Header from "./Header";
 import SignIn from "./SignIn";
-import SignUp from "./SignUp";
+import Register from "./Register";
 import Main from "./Main";
 import Footer from "./Footer";
 import EditProfilePopup from "./EditProfilePopup";
@@ -195,7 +195,7 @@ function App() {
         <Route path='/signup'>
           <div className='page'>
             <Header></Header>
-            <SignUp></SignUp>
+            <Register></Register>
             <Footer></Footer>
           </div>
         </Route>
