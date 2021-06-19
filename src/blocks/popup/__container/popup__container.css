@@ -3,6 +3,7 @@
 @import url('./_type/popup__container_type_newAvatar.css');
 @import url('./_type/popup__container_type_picture.css');
 @import url('./_type/popup__container_type_confirmDelete.css');
+@import url('./_type/popup__container_type_tooltip.css');
 
 .popup__container {
   margin: 0 auto;

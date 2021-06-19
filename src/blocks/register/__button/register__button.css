@@ -5,3 +5,10 @@
     line-height:22px;
     margin-top: 185px;
 }
+
+@media screen and (max-width: 650px) {
+    .register__button {
+      width: 258px;
+      margin-top: 115px;
+    }
+  }

@@ -3,7 +3,7 @@ import UserContext from "../contexts/CurrentUserContext";
 import { Switch, Route, useHistory } from "react-router-dom";
 import "../index.css";
 import Header from "./Header";
-import SignIn from "./SignIn";
+import Login from "./Login";
 import Register from "./Register";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -11,6 +11,7 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import PopupWithForm from "./PopupWithForm";
+import InfoTooltip from "./InfoTooltip";
 import ImagePopup from "./ImagePopup";
 import api from "../utils/api";
 
@@ -19,6 +20,7 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
 
   const [selectedCard, setSelectedCard] = useState({});
 
@@ -88,6 +90,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsImagePopupOpen(false);
+    setIsInfoTooltipOpen(false);
     setSelectedCard({});
     console.log("popup closed");
   };
@@ -188,8 +191,13 @@ function App() {
         <Route path='/signin'>
           <div className='page'>
             <Header></Header>
-            <SignIn></SignIn>
+            <Login></Login>
             <Footer></Footer>
+            <InfoTooltip
+              popupName='tooltip'
+              isOpen={isInfoTooltipOpen}
+              onClose={closeAllPopups}
+            />
           </div>
         </Route>
         <Route path='/signup'>
@@ -197,6 +205,11 @@ function App() {
             <Header></Header>
             <Register></Register>
             <Footer></Footer>
+            <InfoTooltip
+              popupName='tooltip'
+              isOpen={isInfoTooltipOpen}
+              onClose={closeAllPopups}
+            />
           </div>
         </Route>
         <Route exact path='/'>
