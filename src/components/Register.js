@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { Link, useHistory } from 'react-router-dom';
 
-function Register() {
+function Register(props) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("handleSubmit");
+    props.onRegistration({
+      email,
+      password,
+    });
   };
 
   return  <div className="register">

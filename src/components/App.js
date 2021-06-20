@@ -14,6 +14,7 @@ import PopupWithForm from "./PopupWithForm";
 import InfoTooltip from "./InfoTooltip";
 import ImagePopup from "./ImagePopup";
 import api from "../utils/api";
+import authorize from "../utils/authorize";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -185,6 +186,22 @@ function App() {
       });
   };
 
+  /**
+   * handle user registration
+   */
+
+  const handleRegister = ({ email, password }) => {
+    authorize
+      .register(email, password)
+      .then((result) => {
+        console.log(result);
+        setCurrentUser(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <UserContext.Provider value={currentUser}>
       <Switch>
@@ -203,7 +220,7 @@ function App() {
         <Route path='/signup'>
           <div className='page'>
             <Header></Header>
-            <Register></Register>
+            <Register onRegistration={handleRegister}></Register>
             <Footer></Footer>
             <InfoTooltip
               popupName='tooltip'
