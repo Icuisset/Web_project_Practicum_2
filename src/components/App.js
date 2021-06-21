@@ -202,13 +202,29 @@ function App() {
       });
   };
 
+  /**
+   * handle user authorization with token
+   */
+
+  const handleAuthorization = ({ email, password }) => {
+    authorize
+      .authorizeWithToken(email, password)
+      .then((result) => {
+        console.log(result);
+        setCurrentUser(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <UserContext.Provider value={currentUser}>
       <Switch>
         <Route path='/signin'>
           <div className='page'>
             <Header></Header>
-            <Login></Login>
+            <Login onLogin={handleAuthorization}></Login>
             <Footer></Footer>
             <InfoTooltip
               popupName='tooltip'
