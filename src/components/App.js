@@ -24,10 +24,15 @@ function App() {
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
 
   const [selectedCard, setSelectedCard] = useState({});
+  const [cards, setCards] = useState([]);
 
   const [currentUser, setCurrentUser] = useState({});
+  const [userEmail, setEmail] = React.useState("");
 
-  const [cards, setCards] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [isSuccessful, setIsSuccessful] = React.useState(false);
+
+  const history = useHistory();
 
   /**
    * initial call to api to get user information
@@ -195,7 +200,15 @@ function App() {
       .register(email, password)
       .then((result) => {
         console.log(result);
-        setCurrentUser(result);
+        if (result.err) {
+          setIsSuccessful(false);
+          setIsInfoTooltipOpen(true);
+        } else {
+          setIsSuccessful(true);
+          setIsInfoTooltipOpen(true);
+          setEmail(email);
+          history.push("/signin");
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -211,11 +224,33 @@ function App() {
       .authorizeWithToken(email, password)
       .then((result) => {
         console.log(result);
-        setCurrentUser(result);
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  /**
+   * check token is valid and return user id and email
+   */
+
+  const handleTokenValidity = () => {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      authorize
+        .checkTokenIsValid(jwt)
+        .then((result) => {
+          console.log(result);
+          const userEmail = result.data.email;
+          setEmail(userEmail);
+          setIsLoggedIn(true);
+          setIsSuccessful(true);
+          history.push("/");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   return (

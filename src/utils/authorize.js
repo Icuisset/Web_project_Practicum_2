@@ -1,10 +1,8 @@
 class Authorize {
   constructor({
-    baseUrl,
-    headers
+    baseUrl
   }) {
     this._baseUrl = baseUrl
-    this._headers = headers
   }
 
   _checkResponse(res) {
@@ -20,35 +18,45 @@ class Authorize {
   register(email, password) {
     return fetch(this._baseUrl + '/signup', {
       method: 'POST',
-      headers: this._headers,
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         email: email,
         password: password,
       }),
     }).then((res) => this._checkResponse(res))
   }
-
 
   //POST https://around.nomoreparties.co/signin
   authorizeWithToken(email, password) {
     return fetch(this._baseUrl + '/signin', {
       method: 'POST',
-      headers: this._headers,
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         email: email,
         password: password,
       }),
     }).then((res) => this._checkResponse(res))
   }
-}
 
+  //GET https://around.nomoreparties.co/users/me
+  checkTokenIsValid(jwt) {
+    return fetch(this._baseUrl + '/users/me', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${jwt}`,
+      },
+    }).then((res) => this._checkResponse(res))
+  }
+}
 
 
 const authorize = new Authorize({
   baseUrl: 'https://register.nomoreparties.co',
-  headers: {
-    'Content-Type': 'application/json',
-  },
 })
 
 export default authorize;
