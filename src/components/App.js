@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import UserContext from "../contexts/CurrentUserContext";
 import { Switch, Route, useHistory } from "react-router-dom";
+import ProtectedRoute from "./ProtectedRoute";
 import "../index.css";
 import Header from "./Header";
 import Login from "./Login";
@@ -29,7 +30,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [userEmail, setUserEmail] = React.useState("");
 
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(true);
   const [isSuccessful, setIsSuccessful] = React.useState(false);
 
   const history = useHistory();
@@ -300,6 +301,10 @@ function App() {
             />
           </div>
         </Route>
+        <ProtectedRoute
+          path='/ok'
+          component={Footer}
+          loggedIn={isLoggedIn}></ProtectedRoute>
         <Route exact path='/'>
           <div className='page'>
             <Header />
