@@ -27,7 +27,7 @@ function App() {
   const [cards, setCards] = useState([]);
 
   const [currentUser, setCurrentUser] = useState({});
-  const [userEmail, setEmail] = React.useState("");
+  const [userEmail, setUserEmail] = React.useState("");
 
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isSuccessful, setIsSuccessful] = React.useState(false);
@@ -195,18 +195,19 @@ function App() {
    * handle user registration
    */
 
-  const handleRegister = ({ email, password }) => {
+  const handleSignUp = ({ email, password }) => {
     authorize
       .register(email, password)
       .then((result) => {
         console.log(result);
         if (result.err) {
+          console.log(result.err);
           setIsSuccessful(false);
           setIsInfoTooltipOpen(true);
         } else {
           setIsSuccessful(true);
           setIsInfoTooltipOpen(true);
-          setEmail(email);
+          setUserEmail(email);
           history.push("/signin");
         }
       })
@@ -219,11 +220,19 @@ function App() {
    * handle user authorization with token
    */
 
-  const handleAuthorization = ({ email, password }) => {
+  const handleSignIn = ({ email, password }) => {
     authorize
       .authorizeWithToken(email, password)
       .then((result) => {
         console.log(result);
+        if (result.err) {
+          console.log(result.err);
+          setIsSuccessful(false);
+          setIsInfoTooltipOpen(true);
+        }
+        handleCheckTokenIsValid();
+        setUserEmail(email);
+        history.push("/");
       })
       .catch((err) => {
         console.log(err);
@@ -234,15 +243,15 @@ function App() {
    * check token is valid and return user id and email
    */
 
-  const handleTokenValidity = () => {
+  const handleCheckTokenIsValid = () => {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {
       authorize
         .checkTokenIsValid(jwt)
         .then((result) => {
           console.log(result);
-          const userEmail = result.data.email;
-          setEmail(userEmail);
+          const thisUserEmail = result.data.email;
+          setUserEmail(thisUserEmail);
           setIsLoggedIn(true);
           setIsSuccessful(true);
           history.push("/");
@@ -253,13 +262,24 @@ function App() {
     }
   };
 
+  /**
+   * handle Sign out
+   */
+
+  const handleSignOut = () => {
+    localStorage.removeItem("jwt");
+    setIsLoggedIn(false);
+    setUserEmail("");
+    history.push("/signin");
+  };
+
   return (
     <UserContext.Provider value={currentUser}>
       <Switch>
         <Route path='/signin'>
           <div className='page'>
             <Header></Header>
-            <Login onLogin={handleAuthorization}></Login>
+            <Login onLogin={handleSignIn}></Login>
             <Footer></Footer>
             <InfoTooltip
               popupName='tooltip'
@@ -271,7 +291,7 @@ function App() {
         <Route path='/signup'>
           <div className='page'>
             <Header></Header>
-            <Register onRegistration={handleRegister}></Register>
+            <Register onRegistration={handleSignUp}></Register>
             <Footer></Footer>
             <InfoTooltip
               popupName='tooltip'
