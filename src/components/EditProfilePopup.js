@@ -42,7 +42,7 @@ function EditProfilePopup(props) {
         className='popup__input popup__input_value_name'
         placeholder='Name'
         name='profileNameInput'
-        value={name}
+        defaultValue={name}
         onChange={handleNameChange}
         required
         minLength={2}
@@ -55,7 +55,7 @@ function EditProfilePopup(props) {
         className='popup__input popup__input_value_about'
         placeholder='About Me'
         name='profileAboutInput'
-        value={about}
+        defaultValue={about}
         onChange={handleAboutChange}
         required
         minLength={2}
