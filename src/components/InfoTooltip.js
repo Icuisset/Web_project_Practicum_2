@@ -7,8 +7,8 @@ function InfoTooltips(props) {
         <div className='popup__overlay' onClick={props.onClose} />
         <div
           className={`popup__container popup__container_type_${props.popupName}`}>
-         <div className='popup__icon popup__icon_type_valid'></div>
-         <p className='popup__message'>Success: you have now been registered.</p>
+         <div className={props.isSuccessful ? 'popup__icon popup__icon_type_valid' : 'popup__icon popup__icon_type_invalid'}></div>
+         <p className='popup__message'>{props.isSuccessful ? 'Success: you have now been registered.' : 'Oops, something went wrong! Please try again.'}</p>
          <button
           type='button'
           className='close-button close-button_type_editProfile'

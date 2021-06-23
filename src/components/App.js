@@ -226,6 +226,11 @@ function App() {
       .authorizeWithToken(email, password)
       .then((result) => {
         console.log(result);
+        if (result.statusCode === 401) {
+          console.log(result);
+          setIsSuccessful(false);
+          setIsInfoTooltipOpen(true);
+        }
         const JWT = localStorage.getItem("jwt");
         if (JWT) {
           handleCheckTokenIsValid(JWT);
@@ -253,13 +258,13 @@ function App() {
         const thisUserEmail = result.data.email;
         setUserEmail(thisUserEmail);
         setIsLoggedIn(true);
-        console.log(isLoggedIn);
         setIsSuccessful(true);
-        console.log(isSuccessful);
         history.push("/");
       })
       .catch((err) => {
         console.log(err);
+        setIsSuccessful(false);
+        setIsInfoTooltipOpen(true);
       });
   };
 
@@ -346,6 +351,7 @@ function App() {
         popupName='tooltip'
         isOpen={isInfoTooltipOpen}
         onClose={closeAllPopups}
+        isSuccessful={isSuccessful}
       />
     </UserContext.Provider>
   );
