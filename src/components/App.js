@@ -30,7 +30,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [userEmail, setUserEmail] = React.useState("");
 
-  const [isLoggedIn, setIsLoggedIn] = React.useState(true);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isSuccessful, setIsSuccessful] = React.useState(false);
 
   const history = useHistory();
@@ -226,13 +226,36 @@ function App() {
       .authorizeWithToken(email, password)
       .then((result) => {
         console.log(result);
-        if (result.err) {
-          console.log(result.err);
-          setIsSuccessful(false);
-          setIsInfoTooltipOpen(true);
+        const JWT = localStorage.getItem("jwt");
+        if (JWT) {
+          handleCheckTokenIsValid(JWT);
         }
-        handleCheckTokenIsValid();
         setUserEmail(email);
+        console.log(email);
+        history.push("/");
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsSuccessful(false);
+        setIsInfoTooltipOpen(true);
+      });
+  };
+
+  /**
+   * check token is valid and return user id and email
+   */
+
+  const handleCheckTokenIsValid = (JWT) => {
+    authorize
+      .checkTokenIsValid(JWT)
+      .then((result) => {
+        console.log(result);
+        const thisUserEmail = result.data.email;
+        setUserEmail(thisUserEmail);
+        setIsLoggedIn(true);
+        console.log(isLoggedIn);
+        setIsSuccessful(true);
+        console.log(isSuccessful);
         history.push("/");
       })
       .catch((err) => {
@@ -241,33 +264,10 @@ function App() {
   };
 
   /**
-   * check token is valid and return user id and email
+   * handle Log out
    */
 
-  const handleCheckTokenIsValid = () => {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) {
-      authorize
-        .checkTokenIsValid(jwt)
-        .then((result) => {
-          console.log(result);
-          const thisUserEmail = result.data.email;
-          setUserEmail(thisUserEmail);
-          setIsLoggedIn(true);
-          setIsSuccessful(true);
-          history.push("/");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
-
-  /**
-   * handle Sign out
-   */
-
-  const handleSignOut = () => {
+  const handleLogOut = () => {
     localStorage.removeItem("jwt");
     setIsLoggedIn(false);
     setUserEmail("");
@@ -279,81 +279,74 @@ function App() {
       <Switch>
         <Route path='/signin'>
           <div className='page'>
-            <Header></Header>
+            <Header
+              userEmail={""}
+              link={"/signup"}
+              message={"Sign up"}></Header>
             <Login onLogin={handleSignIn}></Login>
             <Footer></Footer>
-            <InfoTooltip
-              popupName='tooltip'
-              isOpen={isInfoTooltipOpen}
-              onClose={closeAllPopups}
-            />
           </div>
         </Route>
         <Route path='/signup'>
           <div className='page'>
-            <Header></Header>
+            <Header userEmail={""} link={"/signin"} message={"Log in"}></Header>
             <Register onRegistration={handleSignUp}></Register>
             <Footer></Footer>
-            <InfoTooltip
-              popupName='tooltip'
-              isOpen={isInfoTooltipOpen}
-              onClose={closeAllPopups}
-            />
           </div>
         </Route>
         <ProtectedRoute
-          path='/ok'
-          component={Footer}
-          loggedIn={isLoggedIn}></ProtectedRoute>
-        <Route exact path='/'>
-          <div className='page'>
-            <Header />
-            <Main
-              onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onEditAvatar={handleEditAvatarClick}
-              onCardClick={handleCardClick}
-              onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete}
-              cards={cards}
-            />
-            <Footer />
-
-            <EditProfilePopup
-              isOpen={isEditProfilePopupOpen}
-              onClose={closeAllPopups}
-              onUpdateUser={handleUpdateUser}
-            />
-
-            <EditAvatarPopup
-              isOpen={isEditAvatarPopupOpen}
-              onClose={closeAllPopups}
-              onUpdateAvatar={handleUpdateAvatar}
-            />
-
-            <AddPlacePopup
-              isOpen={isAddPlacePopupOpen}
-              onClose={closeAllPopups}
-              onAddPlace={handleAddPlaceSubmit}
-            />
-
-            <PopupWithForm popupName='confirmDelete' title='Are you sure?'>
-              <button
-                type='button'
-                className='popup__button confirm-button'
-                aria-label='confirm delete button'>
-                Yes
-              </button>
-            </PopupWithForm>
-
-            <ImagePopup
-              card={selectedCard}
-              isOpen={isImagePopupOpen}
-              onClose={closeAllPopups}
-            />
-          </div>
-        </Route>
+          path='/'
+          component={Main}
+          loggedIn={isLoggedIn}
+          userEmail={userEmail}
+          onLogOut={handleLogOut}
+          onEditProfile={handleEditProfileClick}
+          onAddPlace={handleAddPlaceClick}
+          onEditAvatar={handleEditAvatarClick}
+          onCardClick={handleCardClick}
+          onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete}
+          cards={cards}></ProtectedRoute>
       </Switch>
+
+      <EditProfilePopup
+        isOpen={isEditProfilePopupOpen}
+        onClose={closeAllPopups}
+        onUpdateUser={handleUpdateUser}
+      />
+
+      <EditAvatarPopup
+        isOpen={isEditAvatarPopupOpen}
+        onClose={closeAllPopups}
+        onUpdateAvatar={handleUpdateAvatar}
+      />
+
+      <AddPlacePopup
+        isOpen={isAddPlacePopupOpen}
+        onClose={closeAllPopups}
+        onAddPlace={handleAddPlaceSubmit}
+      />
+
+      <PopupWithForm popupName='confirmDelete' title='Are you sure?'>
+        <button
+          type='button'
+          className='popup__button confirm-button'
+          aria-label='confirm delete button'>
+          Yes
+        </button>
+      </PopupWithForm>
+
+      <ImagePopup
+        card={selectedCard}
+        isOpen={isImagePopupOpen}
+        onClose={closeAllPopups}
+      />
+
+      <InfoTooltip
+        popupName='tooltip'
+        isOpen={isInfoTooltipOpen}
+        onClose={closeAllPopups}
+      />
     </UserContext.Provider>
   );
 }
