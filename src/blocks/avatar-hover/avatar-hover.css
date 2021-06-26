@@ -10,3 +10,7 @@
   transition: opacity 0.3s ease;
   opacity: 0;
 }
+
+.avatar-hover:hover {
+  opacity: 1;
+}
