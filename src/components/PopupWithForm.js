@@ -16,6 +16,12 @@ function PopupWithForm(props) {
             {props.title}
           </h3>
           {props.children}
+          <button
+            type='submit'
+            className='create-button'
+            aria-label='submit button'>
+            {props.buttonText}
+          </button>
         </form>
         <button
           type='button'

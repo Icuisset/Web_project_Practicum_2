@@ -330,6 +330,7 @@ function App() {
         isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}
         onAddPlace={handleAddPlaceSubmit}
+        buttonText={"Create"}
       />
 
       <PopupWithForm popupName='confirmDelete' title='Are you sure?'>

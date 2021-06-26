@@ -27,7 +27,8 @@ function AddPlacePopup(props) {
       title='New Place'
       isOpen={props.isOpen}
       onClose={props.onClose}
-      onSubmit={handleSubmit}>
+      onSubmit={handleSubmit}
+      buttonText={props.buttonText}>
       <input
         id='placeTitle'
         type='text'
@@ -52,13 +53,6 @@ function AddPlacePopup(props) {
         required
       />
       <span id='placeLink-error' className='popup__error' />
-      <button
-        type='submit'
-        className='popup__button create-button'
-        aria-label='create button'
-        onClick={handleSubmit}>
-        Create
-      </button>
     </PopupWithForm>
   );
 }
