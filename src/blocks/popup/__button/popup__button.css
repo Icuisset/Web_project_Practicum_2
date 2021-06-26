@@ -1,5 +1,6 @@
 .popup__button {
   background-color: black;
+  text-transform: capitalize;
   color: white;
   border: none;
   opacity: 1;

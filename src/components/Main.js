@@ -3,7 +3,6 @@ import UserContext from "../contexts/CurrentUserContext";
 import api from "../utils/api";
 import Card from "./Card";
 import Header from "./Header";
-import Footer from "./Footer";
 
 function Main(props) {
   const user = React.useContext(UserContext);
@@ -11,7 +10,7 @@ function Main(props) {
   // const [cards, setCards] = useState([]);
 
   return (
-    <div className='page'>
+    <>
     <Header
               userEmail={props.userEmail}
               link={"/signin"}
@@ -58,8 +57,7 @@ function Main(props) {
         </ul>
       </section>
     </main>
-    <Footer />
-    </div>
+    </>
   );
 }
 

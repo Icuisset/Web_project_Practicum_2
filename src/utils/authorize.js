@@ -47,7 +47,6 @@ class Authorize {
           return data
         }
       })
-      .catch(err => console.log(err))
   }
 
   //GET https://around.nomoreparties.co/users/me

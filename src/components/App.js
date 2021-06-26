@@ -269,6 +269,19 @@ function App() {
   };
 
   /**
+   * handle auto login
+   */
+
+  useEffect(() => {
+    const JWT = localStorage.getItem("jwt");
+    console.log(JWT);
+    if (JWT) {
+      handleCheckTokenIsValid(JWT);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /**
    * handle Log out
    */
 
@@ -281,66 +294,69 @@ function App() {
 
   return (
     <UserContext.Provider value={currentUser}>
-      <Switch>
-        <Route path='/signin'>
-          <div className='page'>
-            <Header
-              userEmail={""}
-              link={"/signup"}
-              message={"Sign up"}></Header>
-            <Login onLogin={handleSignIn}></Login>
-            <Footer></Footer>
-          </div>
-        </Route>
-        <Route path='/signup'>
-          <div className='page'>
-            <Header userEmail={""} link={"/signin"} message={"Log in"}></Header>
-            <Register onRegistration={handleSignUp}></Register>
-            <Footer></Footer>
-          </div>
-        </Route>
-        <ProtectedRoute
-          path='/'
-          component={Main}
-          loggedIn={isLoggedIn}
-          userEmail={userEmail}
-          onLogOut={handleLogOut}
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditAvatar={handleEditAvatarClick}
-          onCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-          cards={cards}></ProtectedRoute>
-      </Switch>
+      <div className='page'>
+        <Switch>
+          <Route path='/signin'>
+            <>
+              <Header
+                userEmail={""}
+                link={"/signup"}
+                message={"Sign up"}></Header>
+              <Login onLogin={handleSignIn}></Login>
+            </>
+          </Route>
+          <Route path='/signup'>
+            <>
+              <Header
+                userEmail={""}
+                link={"/signin"}
+                message={"Log in"}></Header>
+              <Register onRegistration={handleSignUp}></Register>
+            </>
+          </Route>
+          <ProtectedRoute
+            path='/'
+            component={Main}
+            loggedIn={isLoggedIn}
+            userEmail={userEmail}
+            onLogOut={handleLogOut}
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onEditAvatar={handleEditAvatarClick}
+            onCardClick={handleCardClick}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
+            cards={cards}></ProtectedRoute>
+        </Switch>
+        <Footer></Footer>
+      </div>
 
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
         onUpdateUser={handleUpdateUser}
+        buttonText={"save"}
       />
 
       <EditAvatarPopup
         isOpen={isEditAvatarPopupOpen}
         onClose={closeAllPopups}
         onUpdateAvatar={handleUpdateAvatar}
+        buttonText={"save"}
       />
 
       <AddPlacePopup
         isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}
         onAddPlace={handleAddPlaceSubmit}
-        buttonText={"Create"}
+        buttonText={"create"}
       />
 
-      <PopupWithForm popupName='confirmDelete' title='Are you sure?'>
-        <button
-          type='button'
-          className='popup__button confirm-button'
-          aria-label='confirm delete button'>
-          Yes
-        </button>
-      </PopupWithForm>
+      <PopupWithForm
+        popupName='confirmDelete'
+        title='Are you sure?'
+        buttonText={"confirm"}
+      />
 
       <ImagePopup
         card={selectedCard}

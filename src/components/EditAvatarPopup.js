@@ -18,7 +18,8 @@ function EditAvatarPopup(props) {
       title='Change profile picture'
       isOpen={props.isOpen}
       onClose={props.onClose}
-      onSubmit={handleSubmit}>
+      onSubmit={handleSubmit}
+      buttonText={props.buttonText}>
       <input
         id='newAvatarLink'
         type='url'
@@ -29,13 +30,6 @@ function EditAvatarPopup(props) {
         required
       />
       <span id='newAvatarLink-error' className='popup__error' />
-      <button
-        type='submit'
-        className='popup__button saveAvatar-button'
-        aria-label='save Avatar button'
-        onClick={handleSubmit}>
-        Save
-      </button>
     </PopupWithForm>
   );
 }
